@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:skycast/views/splash_screen.dart';
+import 'package:skycast/views/home_screen.dart';
 
 class SkyCastApp extends StatelessWidget {
   const SkyCastApp({super.key});
@@ -17,7 +17,7 @@ class SkyCastApp extends StatelessWidget {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'SkyCast',
-          home: SplashScreen(),
+          home: HomeScreen(),
         );
       },
     );
