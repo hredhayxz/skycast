@@ -104,47 +104,11 @@ class WeatherDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 32.r, vertical: 12.r),
-                decoration: ShapeDecoration(
-                  color: Colors.white.withOpacity(0.10000000149011612),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
-                child: Text(
-                  'Today',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.sp,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+              _dayButton(btnName: 'Today'),
               SizedBox(
                 width: 8.w,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 32.r, vertical: 12.r),
-                decoration: ShapeDecoration(
-                  color: Colors.black.withOpacity(0.10000000149011612),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
-                child: Text(
-                  'Next Days',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.sp,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+              _dayButton(btnName: 'Next Day'),
             ],
           ),
           SizedBox(
@@ -381,6 +345,32 @@ class WeatherDetails extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _dayButton({required String btnName}) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 32.r, vertical: 12.r),
+        decoration: ShapeDecoration(
+          color: Colors.black.withOpacity(0.10000000149011612),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ),
+        child: Text(
+          btnName,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14.sp,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
   }
