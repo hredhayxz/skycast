@@ -13,3 +13,7 @@ final temperatureUnitProvider =
     StateProvider<TemperatureUnit>((ref) => TemperatureUnit.celsius);
 
 enum TemperatureUnit { celsius, fahrenheit }
+
+final weatherDayProvider = StateProvider<int>((ref) {
+  return 0;
+});

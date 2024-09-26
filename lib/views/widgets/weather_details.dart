@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:skycast/models/weather_model.dart';
+import 'package:skycast/providers/weather_provider.dart';
 
-class WeatherDetails extends StatelessWidget {
+class WeatherDetails extends ConsumerWidget {
   const WeatherDetails({super.key, required this.weather});
 
   final WeatherModel weather;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final day = ref.watch(weatherDayProvider);
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -104,11 +108,11 @@ class WeatherDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _dayButton(btnName: 'Today'),
+              _dayButton(btnName: 'Today', isActiveDay: day == 0, ref: ref),
               SizedBox(
                 width: 8.w,
               ),
-              _dayButton(btnName: 'Next Day'),
+              _dayButton(btnName: 'Next Day', isActiveDay: day != 0, ref: ref),
             ],
           ),
           SizedBox(
@@ -118,7 +122,8 @@ class WeatherDetails extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.generate(
-                  weather.forecast!.forecastday?[0].hour?.length ?? 0, (index) {
+                  weather.forecast!.forecastday?[day].hour?.length ?? 0,
+                  (index) {
                 return Padding(
                   padding: EdgeInsets.only(
                     left: index == 0 ? 16.w : 6.w,
@@ -126,7 +131,7 @@ class WeatherDetails extends StatelessWidget {
                   ),
                   child: _weatherCard(
                       hourlyForecast:
-                          weather.forecast!.forecastday![0].hour![index]),
+                          weather.forecast!.forecastday![day].hour![index]),
                 );
               }),
             ),
@@ -349,14 +354,26 @@ class WeatherDetails extends StatelessWidget {
     );
   }
 
-  Widget _dayButton({required String btnName}) {
+  Widget _dayButton(
+      {required String btnName, required isActiveDay, required WidgetRef ref}) {
+    final day = ref.watch(weatherDayProvider);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {},
+      onTap: () {
+        if (btnName == 'Today') {
+          ref.read(weatherDayProvider.notifier).state = 0;
+        } else {
+          if (day < 3) {
+            ref.read(weatherDayProvider.notifier).state++;
+          }
+        }
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32.r, vertical: 12.r),
         decoration: ShapeDecoration(
-          color: Colors.black.withOpacity(0.10000000149011612),
+          color: isActiveDay
+              ? Colors.white.withOpacity(0.10000000149011612)
+              : Colors.black.withOpacity(0.10000000149011612),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
