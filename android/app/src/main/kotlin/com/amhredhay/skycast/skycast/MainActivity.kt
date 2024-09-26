@@ -1,4 +1,4 @@
-package com.amhredhay.skycast.skycast
+package com.amhredhay.skycast
 
 import io.flutter.embedding.android.FlutterActivity
 
