@@ -16,6 +16,7 @@ class WeatherDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final day = ref.watch(weatherDayProvider);
     final weatherController = ref.watch(weatherControllerProvider);
+    final tempUnit = ref.watch(temperatureUnitProvider);
 
     return RefreshIndicator(
       onRefresh: () async => ref.refresh(weatherProvider),
@@ -28,13 +29,14 @@ class WeatherDetails extends ConsumerWidget {
             ),
 
             /// Location info
-            _buildLocationInfo(context: context),
+            _buildLocationInfo(context: context, ref: ref, tempUnit: tempUnit),
             SizedBox(
               height: height15,
             ),
 
             /// Live forecast data view
-            _buildLiveForecastData(day: day, context: context),
+            _buildLiveForecastData(
+                day: day, context: context, tempUnit: tempUnit),
             SizedBox(
               height: height32,
             ),
@@ -73,12 +75,14 @@ class WeatherDetails extends ConsumerWidget {
                       left: index == 0 ? width16 : width6,
                       right: index == 23 ? width16 : width6,
                     ),
-                    child: _hourlyWeatherCard(
-                        hourlyForecast:
-                            weather.forecast!.forecastday![day].hour![index],
-                        day: day,
-                        weatherController: weatherController,
-                        context: context),
+                    child: _buildHourlyWeatherCard(
+                      hourlyForecast:
+                          weather.forecast!.forecastday![day].hour![index],
+                      day: day,
+                      weatherController: weatherController,
+                      context: context,
+                      tempUnit: tempUnit,
+                    ),
                   );
                 }),
               ),
@@ -99,13 +103,40 @@ class WeatherDetails extends ConsumerWidget {
   }
 
   /// Builds the location information section.
-  Widget _buildLocationInfo({required BuildContext context}) {
+  Widget _buildLocationInfo(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required TemperatureUnit tempUnit}) {
     return Column(
       children: [
-        Text(
-          weather.location?.name ?? '',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyLarge,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search,
+                size: radius32,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              weather.location?.name ?? '',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            TextButton(
+              onPressed: () =>
+                  ref.read(temperatureUnitProvider.notifier).state =
+                      tempUnit == TemperatureUnit.celsius
+                          ? TemperatureUnit.fahrenheit
+                          : TemperatureUnit.celsius,
+              child: Text(
+                tempUnit == TemperatureUnit.celsius ? '°C' : '°F',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: height15),
         Row(
@@ -126,7 +157,9 @@ class WeatherDetails extends ConsumerWidget {
 
   /// Live forecast data view
   Widget _buildLiveForecastData(
-      {required int day, required BuildContext context}) {
+      {required int day,
+      required BuildContext context,
+      required TemperatureUnit tempUnit}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -149,8 +182,12 @@ class WeatherDetails extends ConsumerWidget {
                 ),
                 Text(
                   day == 0
-                      ? '${weather.current?.tempC ?? 0}°'
-                      : '${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°',
+                      ? tempUnit == TemperatureUnit.celsius
+                          ? '${weather.current?.tempC ?? 0}°'
+                          : '${weather.current?.tempF ?? 0}°'
+                      : tempUnit == TemperatureUnit.celsius
+                          ? '${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°'
+                          : '${weather.forecast!.forecastday?[day].day?.avgtempF ?? 0}°',
                   textAlign: TextAlign.right,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 122.71.sp,
@@ -163,8 +200,12 @@ class WeatherDetails extends ConsumerWidget {
         ),
         Text(
           day == 0
-              ? '${weather.current?.condition?.text ?? ''}  -  H:${weather.current?.heatindexC ?? 0}°  FL: ${weather.current?.feelslikeC ?? 0}°'
-              : '${weather.forecast!.forecastday?[day].day?.condition?.text ?? ''}  -  H:${weather.forecast!.forecastday?[day].day?.maxtempC ?? 0}°  FL: ${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°',
+              ? tempUnit == TemperatureUnit.celsius
+                  ? '${weather.current?.condition?.text ?? ''}  -  H:${weather.current?.heatindexC ?? 0}°  FL: ${weather.current?.feelslikeC ?? 0}°'
+                  : '${weather.current?.condition?.text ?? ''}  -  H:${weather.current?.heatindexF ?? 0}°  FL: ${weather.current?.feelslikeF ?? 0}°'
+              : tempUnit == TemperatureUnit.celsius
+                  ? '${weather.forecast!.forecastday?[day].day?.condition?.text ?? ''}  -  H:${weather.forecast!.forecastday?[day].day?.maxtempC ?? 0}°  FL: ${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°'
+                  : '${weather.forecast!.forecastday?[day].day?.condition?.text ?? ''}  -  H:${weather.forecast!.forecastday?[day].day?.maxtempF ?? 0}°  FL: ${weather.forecast!.forecastday?[day].day?.avgtempF ?? 0}°',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge,
         ),
@@ -415,11 +456,12 @@ class WeatherDetails extends ConsumerWidget {
   }
 
   /// Hourly weather card
-  Widget _hourlyWeatherCard(
+  Widget _buildHourlyWeatherCard(
       {required Hour hourlyForecast,
       required int day,
       required WeatherController weatherController,
-      required BuildContext context}) {
+      required BuildContext context,
+      required TemperatureUnit tempUnit}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -461,7 +503,9 @@ class WeatherDetails extends ConsumerWidget {
               ),
               SizedBox(height: height8),
               Text(
-                '${hourlyForecast.tempC ?? 0}°',
+                tempUnit == TemperatureUnit.celsius
+                    ? '${hourlyForecast.tempC ?? 0}°'
+                    : '${hourlyForecast.tempF ?? 0}°',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),

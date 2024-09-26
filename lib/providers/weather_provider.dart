@@ -10,3 +10,8 @@ final weatherProvider = FutureProvider<WeatherModel>((ref) async {
 });
 
 final weatherDayProvider = StateProvider<int>((ref) => 0);
+
+final temperatureUnitProvider =
+    StateProvider<TemperatureUnit>((ref) => TemperatureUnit.celsius);
+
+enum TemperatureUnit { celsius, fahrenheit }

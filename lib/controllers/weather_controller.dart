@@ -19,6 +19,7 @@ class WeatherController {
 
       return weather;
     } catch (e) {
+      // Return saved data
       return Pref.weatherData;
     }
   }
