@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skycast/utils/dimens.dart';
 
 class ThemeManager {
   ThemeManager._();
@@ -45,6 +46,20 @@ class ThemeManager {
       colorScheme: ColorScheme.dark(
         primary: Colors.white,
         secondary: Colors.white.withOpacity(0.5),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding:
+            EdgeInsets.symmetric(horizontal: radius27, vertical: radius8),
+        filled: true,
+        fillColor: Colors.grey[200],
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(100),
+            right: Radius.circular(100),
+          ),
+          borderSide: BorderSide.none,
+        ),
+        hintStyle: TextStyle(color: Colors.grey[600]),
       ),
     );
   }

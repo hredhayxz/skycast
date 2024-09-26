@@ -9,11 +9,13 @@ class WeatherController {
   final LocationService _locationService = LocationService();
 
   /// Get location and weather data method
-  Future<WeatherModel> getWeatherData() async {
+  Future<WeatherModel> getWeatherData({String? searchQuery}) async {
     try {
       final position = await _locationService.getCurrentLocation();
       final weather = await _weatherService.getWeather(
-          position.latitude, position.longitude);
+          latitude: position.latitude,
+          longitude: position.longitude,
+          location: searchQuery);
       // Store in local DB
       Pref.weatherData = weather;
 

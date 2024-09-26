@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Wrapper {
-  Wrapper._();
+class ImageUtils {
+  ImageUtils._();
 
   /// For Cached Network image
   static Widget setCachedNetworkImage({

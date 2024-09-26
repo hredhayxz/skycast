@@ -4,9 +4,12 @@ import 'package:skycast/models/weather_model.dart';
 import 'package:skycast/utils/api_constants.dart';
 
 class WeatherService {
-  Future<WeatherModel> getWeather(double latitude, double longitude) async {
-    final url = Uri.parse(
-        '${APIConstants.baseUrl}/forecast.json?key=${APIConstants.apiKey}&q=$latitude,$longitude&days=3');
+  Future<WeatherModel> getWeather(
+      {double? latitude, double? longitude, String? location}) async {
+    String endpoint = location == null
+        ? '${APIConstants.baseUrl}/forecast.json?key=${APIConstants.apiKey}&q=$latitude,$longitude&days=3'
+        : '${APIConstants.baseUrl}/forecast.json?key=${APIConstants.apiKey}&q=$location&days=3';
+    final url = Uri.parse(endpoint);
 
     try {
       final response = await get(url);

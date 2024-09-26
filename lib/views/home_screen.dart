@@ -10,6 +10,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherData = ref.watch(weatherProvider);
+
     return Scaffold(
       body: Container(
         height: double.infinity,
