@@ -32,7 +32,26 @@ class HomeScreen extends ConsumerWidget {
           error: (error, stack) => Padding(
             padding: EdgeInsets.all(radius27),
             child: Center(
-              child: Text('Error: $error'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Something went wrong!',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  SizedBox(
+                    height: height8,
+                  ),
+                  IconButton(
+                    onPressed: () => ref.refresh(weatherProvider),
+                    icon: Icon(
+                      Icons.refresh,
+                      color: Colors.red,
+                      size: radius32,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

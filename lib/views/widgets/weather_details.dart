@@ -18,7 +18,7 @@ class WeatherDetails extends ConsumerWidget {
     final weatherController = ref.watch(weatherControllerProvider);
 
     return RefreshIndicator(
-      onRefresh: () async => weatherController.getWeatherData(),
+      onRefresh: () async => ref.refresh(weatherProvider),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -26,37 +26,15 @@ class WeatherDetails extends ConsumerWidget {
             SizedBox(
               height: height40,
             ),
-            Text(
-              weather.location?.name ?? '',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            SizedBox(
-              height: height15,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.location_on_rounded,
-                ),
-                SizedBox(
-                  width: width8,
-                ),
-                Text(
-                  'Current Location',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
+
+            /// Location info
+            _buildLocationInfo(context: context),
             SizedBox(
               height: height15,
             ),
 
             /// Live forecast data view
-            _liveForecastData(day: day, context: context),
+            _buildLiveForecastData(day: day, context: context),
             SizedBox(
               height: height32,
             ),
@@ -110,7 +88,7 @@ class WeatherDetails extends ConsumerWidget {
             ),
 
             /// Sunrise & Sunset view
-            _sunriseSunsetView(
+            _buildSunriseSunsetView(
                 day: day,
                 weatherController: weatherController,
                 context: context),
@@ -120,8 +98,35 @@ class WeatherDetails extends ConsumerWidget {
     );
   }
 
+  /// Builds the location information section.
+  Widget _buildLocationInfo({required BuildContext context}) {
+    return Column(
+      children: [
+        Text(
+          weather.location?.name ?? '',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        SizedBox(height: height15),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.location_on_rounded),
+            SizedBox(width: width8),
+            Text(
+              'Current Location',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   /// Live forecast data view
-  Widget _liveForecastData({required int day, required BuildContext context}) {
+  Widget _buildLiveForecastData(
+      {required int day, required BuildContext context}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -168,7 +173,7 @@ class WeatherDetails extends ConsumerWidget {
   }
 
   /// Sunrise & Sunset view
-  Widget _sunriseSunsetView(
+  Widget _buildSunriseSunsetView(
       {required int day,
       required WeatherController weatherController,
       required BuildContext context}) {
