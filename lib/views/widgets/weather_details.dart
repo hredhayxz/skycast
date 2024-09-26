@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skycast/controllers/weather_controller.dart';
 import 'package:skycast/models/weather_model.dart';
 import 'package:skycast/providers/weather_provider.dart';
+import 'package:skycast/utils/package_dependency_wrapper.dart';
 
 class WeatherDetails extends ConsumerWidget {
   const WeatherDetails({super.key, required this.weather});
@@ -131,13 +132,12 @@ class WeatherDetails extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.network(
-                  day == 0
+                Wrapper.setCachedNetworkImage(
+                  imageUrl: day == 0
                       ? 'https:${weather.current?.condition?.icon}'
                       : 'https:${weather.forecast!.forecastday?[day].day?.condition?.icon}',
                   height: 130.h,
                   width: 135.h,
-                  fit: BoxFit.fill,
                 ),
                 SizedBox(
                   width: 27.w,
@@ -472,11 +472,10 @@ class WeatherDetails extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: 8.h),
-              Image.network(
-                'https:${hourlyForecast.condition?.icon ?? ''}',
+              Wrapper.setCachedNetworkImage(
+                imageUrl: 'https:${hourlyForecast.condition?.icon ?? ''}',
                 width: 49.85.h,
                 height: 48.h,
-                fit: BoxFit.fill,
               ),
               SizedBox(height: 8.h),
               Text(
