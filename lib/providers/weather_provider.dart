@@ -9,11 +9,4 @@ final weatherProvider = FutureProvider<WeatherModel>((ref) async {
   return weatherController.getWeatherData();
 });
 
-final temperatureUnitProvider =
-    StateProvider<TemperatureUnit>((ref) => TemperatureUnit.celsius);
-
-enum TemperatureUnit { celsius, fahrenheit }
-
-final weatherDayProvider = StateProvider<int>((ref) {
-  return 0;
-});
+final weatherDayProvider = StateProvider<int>((ref) => 0);
