@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skycast/providers/weather_provider.dart';
+import 'package:skycast/utils/dimens.dart';
 import 'package:skycast/views/widgets/weather_details.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -30,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           error: (error, stack) => Padding(
-            padding: EdgeInsets.all(27.r),
+            padding: EdgeInsets.all(radius27),
             child: Center(
               child: Text('Error: $error'),
             ),

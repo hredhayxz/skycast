@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skycast/controllers/weather_controller.dart';
 import 'package:skycast/models/weather_model.dart';
 import 'package:skycast/providers/weather_provider.dart';
+import 'package:skycast/utils/dimens.dart';
 import 'package:skycast/utils/package_dependency_wrapper.dart';
 
 class WeatherDetails extends ConsumerWidget {
@@ -23,68 +24,63 @@ class WeatherDetails extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: 40.h,
+              height: height40,
             ),
             Text(
               weather.location?.name ?? '',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.sp,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             SizedBox(
-              height: 15.h,
+              height: height15,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_rounded,
-                  size: 16.r,
-                  color: Colors.white54,
                 ),
                 SizedBox(
-                  width: 8.w,
+                  width: width8,
                 ),
                 Text(
                   'Current Location',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontFamily: 'Circular Std',
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
             SizedBox(
-              height: 15.h,
+              height: height15,
             ),
 
             /// Live forecast data view
-            _liveForecastData(day: day),
+            _liveForecastData(day: day, context: context),
             SizedBox(
-              height: 32.h,
+              height: height32,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _dayButton(btnName: 'Today', isActiveDay: day == 0, ref: ref),
+                _dayButton(
+                    btnName: 'Today',
+                    isActiveDay: day == 0,
+                    ref: ref,
+                    context: context),
                 SizedBox(
-                  width: 8.w,
+                  width: width8,
                 ),
                 _dayButton(
-                    btnName: 'Next Day', isActiveDay: day != 0, ref: ref),
+                    btnName: 'Next Day',
+                    isActiveDay: day != 0,
+                    ref: ref,
+                    context: context),
               ],
             ),
             SizedBox(
-              height: 25.h,
+              height: height25,
             ),
 
             /// Hourly weather data view
@@ -96,24 +92,28 @@ class WeatherDetails extends ConsumerWidget {
                     (index) {
                   return Padding(
                     padding: EdgeInsets.only(
-                      left: index == 0 ? 16.w : 6.w,
-                      right: index == 23 ? 16.w : 6.w,
+                      left: index == 0 ? width16 : width6,
+                      right: index == 23 ? width16 : width6,
                     ),
                     child: _hourlyWeatherCard(
                         hourlyForecast:
                             weather.forecast!.forecastday![day].hour![index],
                         day: day,
-                        weatherController: weatherController),
+                        weatherController: weatherController,
+                        context: context),
                   );
                 }),
               ),
             ),
             SizedBox(
-              height: 7.h,
+              height: height8,
             ),
 
             /// Sunrise & Sunset view
-            _sunriseSunsetView(day: day, weatherController: weatherController),
+            _sunriseSunsetView(
+                day: day,
+                weatherController: weatherController,
+                context: context),
           ],
         ),
       ),
@@ -121,13 +121,13 @@ class WeatherDetails extends ConsumerWidget {
   }
 
   /// Live forecast data view
-  Widget _liveForecastData({required int day}) {
+  Widget _liveForecastData({required int day, required BuildContext context}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         FittedBox(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 27.r),
+            padding: EdgeInsets.symmetric(horizontal: radius27),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -136,23 +136,21 @@ class WeatherDetails extends ConsumerWidget {
                   imageUrl: day == 0
                       ? 'https:${weather.current?.condition?.icon}'
                       : 'https:${weather.forecast!.forecastday?[day].day?.condition?.icon}',
-                  height: 130.h,
-                  width: 135.h,
+                  height: height130,
+                  width: height135,
                 ),
                 SizedBox(
-                  width: 27.w,
+                  width: width24,
                 ),
                 Text(
                   day == 0
                       ? '${weather.current?.tempC ?? 0}°'
                       : '${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 122.71.sp,
-                    fontFamily: 'Circular Std',
-                    fontWeight: FontWeight.w300,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 122.71.sp,
+                        fontWeight: FontWeight.w300,
+                      ),
                 ),
               ],
             ),
@@ -163,12 +161,7 @@ class WeatherDetails extends ConsumerWidget {
               ? '${weather.current?.condition?.text ?? ''}  -  H:${weather.current?.heatindexC ?? 0}°  FL: ${weather.current?.feelslikeC ?? 0}°'
               : '${weather.forecast!.forecastday?[day].day?.condition?.text ?? ''}  -  H:${weather.forecast!.forecastday?[day].day?.maxtempC ?? 0}°  FL: ${weather.forecast!.forecastday?[day].day?.avgtempC ?? 0}°',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.sp,
-            fontFamily: 'Circular Std',
-            fontWeight: FontWeight.w400,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ],
     );
@@ -176,9 +169,11 @@ class WeatherDetails extends ConsumerWidget {
 
   /// Sunrise & Sunset view
   Widget _sunriseSunsetView(
-      {required int day, required WeatherController weatherController}) {
+      {required int day,
+      required WeatherController weatherController,
+      required BuildContext context}) {
     return Container(
-      padding: EdgeInsets.all(30.r),
+      padding: EdgeInsets.all(radius30),
       width: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -189,11 +184,12 @@ class WeatherDetails extends ConsumerWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 60.h,
+            height: height60,
           ),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 16.r),
+            padding:
+                EdgeInsets.symmetric(horizontal: radius8, vertical: radius16),
             decoration: ShapeDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -205,11 +201,11 @@ class WeatherDetails extends ConsumerWidget {
               ),
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  width: 1.5.w,
+                  width: width1P5,
                   strokeAlign: BorderSide.strokeAlignOutside,
                   color: Colors.white.withOpacity(0.2),
                 ),
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(radius16),
               ),
             ),
             child: Row(
@@ -218,11 +214,13 @@ class WeatherDetails extends ConsumerWidget {
               children: [
                 Image.asset(
                   'assets/images/sunrise_and_sunset.png',
-                  height: 56.h,
-                  width: 56.h,
+                  height: height56,
+                  width: height56,
                   fit: BoxFit.fill,
                 ),
-                SizedBox(width: 24.w),
+                SizedBox(
+                  width: width24,
+                ),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -230,12 +228,7 @@ class WeatherDetails extends ConsumerWidget {
                   children: [
                     Text(
                       'Sunset',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontFamily: 'Circular Std',
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text.rich(
                       TextSpan(
@@ -245,31 +238,31 @@ class WeatherDetails extends ConsumerWidget {
                                     .forecast!.forecastday?[day].astro?.sunset
                                     ?.split(' ')[0] ??
                                 '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.sp,
-                              fontFamily: 'Circular Std',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.w500),
                           ),
                           TextSpan(
                             text: weather
                                     .forecast!.forecastday?[day].astro?.sunset
                                     ?.split(' ')[1] ??
                                 '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontFamily: 'Circular Std',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                SizedBox(width: 24.w),
+                SizedBox(
+                  width: width24,
+                ),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -277,12 +270,7 @@ class WeatherDetails extends ConsumerWidget {
                   children: [
                     Text(
                       'Sunrise',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontFamily: 'Circular Std',
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text.rich(
                       TextSpan(
@@ -292,24 +280,17 @@ class WeatherDetails extends ConsumerWidget {
                                     .forecast!.forecastday?[day].astro?.sunrise
                                     ?.split(' ')[0] ??
                                 '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.sp,
-                              fontFamily: 'Circular Std',
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontSize: 24.sp),
                           ),
                           TextSpan(
                             text: weather
                                     .forecast!.forecastday?[day].astro?.sunrise
                                     ?.split(' ')[1] ??
                                 '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontFamily: 'Circular Std',
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
                       ),
@@ -320,11 +301,12 @@ class WeatherDetails extends ConsumerWidget {
             ),
           ),
           SizedBox(
-            height: 16.h,
+            height: height15,
           ),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 16.r),
+            padding:
+                EdgeInsets.symmetric(horizontal: radius8, vertical: radius16),
             decoration: ShapeDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -336,11 +318,11 @@ class WeatherDetails extends ConsumerWidget {
               ),
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  width: 1.5.w,
+                  width: width1P5,
                   strokeAlign: BorderSide.strokeAlignOutside,
                   color: Colors.white.withOpacity(0.2),
                 ),
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(radius16),
               ),
             ),
             child: Row(
@@ -349,11 +331,13 @@ class WeatherDetails extends ConsumerWidget {
               children: [
                 Image.asset(
                   'assets/images/uv_index_image.png',
-                  height: 56.h,
-                  width: 56.h,
+                  height: height56,
+                  width: height56,
                   fit: BoxFit.fill,
                 ),
-                SizedBox(width: 24.w),
+                SizedBox(
+                  width: width24,
+                ),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -361,24 +345,21 @@ class WeatherDetails extends ConsumerWidget {
                   children: [
                     Text(
                       'UV Index',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontFamily: 'Circular Std',
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.white.withOpacity(0.5)),
                     ),
                     Text(
                       weatherController.uvIndexLevel(weather
                               .forecast!.forecastday?[day].day?.uv
                               ?.toDouble() ??
                           0),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24.sp,
-                        fontFamily: 'Circular Std',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ],
                 ),
@@ -392,7 +373,10 @@ class WeatherDetails extends ConsumerWidget {
 
   /// Day button for change weather upto 3 days
   Widget _dayButton(
-      {required String btnName, required isActiveDay, required WidgetRef ref}) {
+      {required String btnName,
+      required isActiveDay,
+      required WidgetRef ref,
+      required BuildContext context}) {
     final day = ref.watch(weatherDayProvider);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -406,7 +390,7 @@ class WeatherDetails extends ConsumerWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 32.r, vertical: 12.r),
+        padding: EdgeInsets.symmetric(horizontal: radius32, vertical: radius12),
         decoration: ShapeDecoration(
           color: isActiveDay
               ? Colors.white.withOpacity(0.10000000149011612)
@@ -418,12 +402,8 @@ class WeatherDetails extends ConsumerWidget {
         child: Text(
           (day == 2 && btnName != 'Today') ? 'Third Day' : btnName,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.sp,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w700,
-          ),
+          style:
+              Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14.sp),
         ),
       ),
     );
@@ -433,12 +413,14 @@ class WeatherDetails extends ConsumerWidget {
   Widget _hourlyWeatherCard(
       {required Hour hourlyForecast,
       required int day,
-      required WeatherController weatherController}) {
+      required WeatherController weatherController,
+      required BuildContext context}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 16.r),
+          padding:
+              EdgeInsets.symmetric(horizontal: radius8, vertical: radius16),
           decoration: ShapeDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -450,7 +432,7 @@ class WeatherDetails extends ConsumerWidget {
             ),
             shape: RoundedRectangleBorder(
               side: BorderSide(
-                width: 1.5.w,
+                width: width1P5,
                 strokeAlign: BorderSide.strokeAlignInside,
                 color: Colors.grey.withOpacity(0.2),
               ),
@@ -464,49 +446,39 @@ class WeatherDetails extends ConsumerWidget {
                 weatherController
                     .formatDateTime(hourlyForecast.timeEpoch?.toInt() ?? 0),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                  fontFamily: 'Circular Std',
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: height8),
               Wrapper.setCachedNetworkImage(
                 imageUrl: 'https:${hourlyForecast.condition?.icon ?? ''}',
-                width: 49.85.h,
-                height: 48.h,
+                width: height49,
+                height: height49,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: height8),
               Text(
                 '${hourlyForecast.tempC ?? 0}°',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontFamily: 'Circular Std',
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 7.h,
+          height: height8,
         ),
         ((day == 0) &&
                 (weatherController
                     .isCurrentHour(hourlyForecast.timeEpoch?.toInt() ?? 0)))
             ? Container(
-                width: 12.h,
-                height: 12.h,
+                width: height12,
+                height: height12,
                 decoration: const ShapeDecoration(
                   color: Colors.white,
                   shape: OvalBorder(),
                 ),
               )
             : SizedBox(
-                height: 12.h,
+                height: height12,
               ),
       ],
     );

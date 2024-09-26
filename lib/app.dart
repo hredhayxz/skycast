@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skycast/utils/theme_manager.dart';
 import 'package:skycast/views/home_screen.dart';
 
 class SkyCastApp extends StatelessWidget {
@@ -14,10 +15,11 @@ class SkyCastApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return const MaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'SkyCast',
-          home: HomeScreen(),
+          theme: ThemeManager.getAppTheme(),
+          home: const HomeScreen(),
         );
       },
     );

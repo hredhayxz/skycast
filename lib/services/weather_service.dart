@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:skycast/models/weather_model.dart';
-import 'package:skycast/utils/constants.dart';
+import 'package:skycast/utils/api_constants.dart';
 
 class WeatherService {
   Future<WeatherModel> getWeather(double latitude, double longitude) async {
     final url = Uri.parse(
-        '${Constants.baseUrl}/forecast.json?key=${Constants.apiKey}&q=$latitude,$longitude&days=3');
+        '${APIConstants.baseUrl}/forecast.json?key=${APIConstants.apiKey}&q=$latitude,$longitude&days=3');
 
     try {
       final response = await get(url);
