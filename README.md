@@ -13,35 +13,35 @@ SkyCast is a user-friendly application that provides real-time weather data and 
 As the creator of SkyCast, my responsibilities included:
 
 
-# 1. UI Design
+1. UI Design
    - Create a visually appealing user interface for the weather app.
    - Alternatively, utilize a provided [Figma design link](https://www.figma.com/file/dX2fGgCBNXdzVTAQLZGk1a/Weather-App-UI-Design?type=design&node-id=0%3A1&mode=design&t=M6cFywjr4XIGGn57-1) for UI elements.
 
-# 2. Current Weather Conditions
+2. Current Weather Conditions
    - Display essential weather data: temperature, description, forecast, sunrise, sunset, uv temp etc.
 
-# 3. Forecast Display
+3. Forecast Display
    - Show a 3-day weather forecast with date, weather icons, and temperatures.
 
-# 4. Weather Data Retrieval
+4. Weather Data Retrieval
    - Choose a public [weather API](https://www.weatherapi.com/) to fetch data.
    - Implement location services to automatically get the user’s location (latitude and longitude).
 
-# 5. Location Management
+5. Location Management
    - Use the user's location to retrieve specific weather data.
    - Provide an option for users to manually enter a location.
 
-# 6. Unit Conversion
+6. Unit Conversion
    - Implement functionality to convert temperatures between Celsius and Fahrenheit.
 
-# 7. Local Storage
+7. Local Storage
    - Use a local database (like Hive or Sqflite) to persist fetched weather data for offline access.
 
-# 8. Code Structure
+8. Code Structure
    - Follow best practices for code structure, adhering to design patterns like MVC.
    - Use a state management library (like Riverpod or BLoC) instead of setState.
 
-# 9. Error Handling
+9. Error Handling
    - Gracefully manage exceptions and errors throughout the application.
 
 
