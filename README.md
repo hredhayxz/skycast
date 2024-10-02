@@ -121,7 +121,7 @@ flutter run
 
 ## Used Packages
 
-CraftyBay integrates the following packages to enhance functionality:
+SkyCast integrates the following packages to enhance functionality:
 - `http: ^1.2.2`: The HTTP package provides a straightforward way to make HTTP requests in your Flutter app. It's essential for fetching data from APIs and working with web services.
 - `cached_network_image: ^3.4.1`: For network image caching and showing.
 - `flutter_riverpod: ^2.5.1`: Riverpod is a state management library for Flutter that simplifies the process of managing application state. It provides a clean and efficient way to handle state and dependencies in your app.
@@ -134,7 +134,7 @@ CraftyBay integrates the following packages to enhance functionality:
 
 ## Project Directory Structure
 
-The CraftyBay directory structure is organized as follows:
+The SkyCast directory structure is organized as follows:
 
 ```
 
